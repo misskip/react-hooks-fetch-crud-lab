@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function QuestionForm(props) {
   const [formData, setFormData] = useState({
@@ -9,11 +9,32 @@ function QuestionForm(props) {
     answer4: "",
     correctIndex: 0,
   });
+  const [loading, setLoading] = useState(false);
+  const [questions, setQuestions] = useState([]);
 
-  function handleChange(event) {
+  useEffect(() => {
+      fetch('http://localhost:4000/questions')
+    .then(response => {
+      return response.json();
+    })
+    .then(data =>{
+      console.log(data);
+      setQuestions(data)
+    })
+    loadQuestions();
+  }, []); 
+  
+  
+  useEffect(() => {
+      loadQuestions();
+  }, []);
+
+  loadQuestions = () => getQuesions().then((formData) => formData.data);
+
+  const handleChange = (e)  => {
     setFormData({
       ...formData,
-      [event.target.name]: event.target.value,
+      [e.target.name]: e.target.value,
     });
   }
 
